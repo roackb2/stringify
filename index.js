@@ -49,7 +49,7 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
             var totalCount = 0;
             for (var key in obj) {
                 totalCount++;
-                if (Object.prototype.toString.call(obj[key]) === '[object Function]' || !ignoreFunc) {
+                if (Object.prototype.toString.call(obj[key]) !== '[object Function]' || !ignoreFunc) {
                     count++;
                 }
             }
@@ -58,7 +58,7 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
                 var counter = 0;
                 for (var key in obj) {
                     var value = obj[key];
-                    if (Object.prototype.toString.call(value) === '[object Function]' || !ignoreFunc) {
+                    if (Object.prototype.toString.call(value) !== '[object Function]' || !ignoreFunc) {
                         counter++;
                         result += prefix + indent + key + ": " + stringify(value, ignoreFunc, printFuncContent, "", depth + 1, [].concat(path));
                         if (counter < count) {
