@@ -1,10 +1,14 @@
 {
   "name": "stringify",
   "version": "1.0.0",
-  "description": "a util function to print complex object",
+  "description": "a util funciton to stringify complex data",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roackb2/stringify.git"
   },
   "keywords": [
     "stringify",
@@ -12,5 +16,9 @@
     "dumps"
   ],
   "author": "Jay Liang <roackb2@gmail.com> (https://www.facebook.com/profile.php?id=1391931108)",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roackb2/stringify/issues"
+  },
+  "homepage": "https://github.com/roackb2/stringify#readme"
 }
