@@ -23,7 +23,7 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
     path.push(obj);
 
     var result = former;
-    if (Object.prototype.toString.call(obj) === '[object Array]' || Object.prototype.toString.call(obj) === '[object Arguments]') {
+    if (isList(obj)) {
         if (!encountered) {
             if(obj.length > 0) {
                 result += "[\n";
@@ -43,13 +43,13 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
         } else {
             result += "[Circular]";
         }
-    } else if (Object.prototype.toString.call(obj) === '[object Object]') {
+    } else if (isMapping(obj)) {
         if (!encountered) {
             var count = 0;
             var totalCount = 0;
             for (var key in obj) {
                 totalCount++;
-                if (Object.prototype.toString.call(obj[key]) !== '[object Function]' || !ignoreFunc) {
+                if (!isFunction(obj[key]) || !ignoreFunc) {
                     count++;
                 }
             }
@@ -58,7 +58,7 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
                 var counter = 0;
                 for (var key in obj) {
                     var value = obj[key];
-                    if (Object.prototype.toString.call(value) !== '[object Function]' || !ignoreFunc) {
+                    if (!isFunction(value) || !ignoreFunc) {
                         counter++;
                         result += prefix + indent + key + ": " + stringify(value, ignoreFunc, printFuncContent, "", depth + 1, [].concat(path));
                         if (counter < count) {
@@ -76,7 +76,7 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
         } else {
             result += "[Circular]"
         }
-    } else if (Object.prototype.toString.call(obj) === '[object Function]') {
+    } else if (isFunction(obj)) {
         if (printFuncContent) {
             var lines = ("" + obj).split("\n");
             var funcContent = "";
@@ -101,3 +101,28 @@ function stringify(obj, ignoreFunc, printFuncContent, former, depth, path) {
     }
     return result;
 }
+
+
+
+function isList(obj) {
+    return (Object.prototype.toString.call(obj) === '[object Array]' || Object.prototype.toString.call(obj) === '[object Arguments]') && Object.keys(obj).every(function(e) {
+            return !isNaN(parseInt(e));
+        });
+}
+
+function isMapping(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]' || ((Object.prototype.toString.call(obj) === '[object Array]' || Object.prototype.toString.call(obj) === '[object Arguments]') && Object.keys(obj).some(function(e) {
+            return isNaN(parseInt(e));
+        }));
+}
+
+function isFunction(obj) {
+    return Object.prototype.toString.call(obj) === '[object Function]';
+}
+
+
+
+
+
+
+
