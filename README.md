@@ -14,20 +14,17 @@ npm install git+https://git@github.com/roackb2/stringify.git
 
 # Feature
 
-* Circular detection: No need to worry about circular refrences
+* Circular detection: No need to worry about circular references
 * Function attributes printed: You could see all functions inside an object
-* Print function content: If specified, Stringify would print function content and is beatifully indented. (as long as the source code of the function is correctly indented)
+* Print function content: If specified, Stringify would print function content and is beatifully indented. (as long as the closing curly bracket of the function is correctly indented)
 
 # Usage
 
 ```javascript
-var stringify = require('stringify')
-
 var obj = [{
     hello: "world1",
     test: true,
 }, {
-
     hello: "world2",
     test: {
         inner: 1, object: "two"
@@ -45,17 +42,23 @@ var obj = [{
             func: function() {
                 var test;
             },
-            func2: function() {
-                var test2
-            },
+            func2:
+                function()
+                    {
+                        var test2
+                    },
             err: new Error("test error object"),
             date: new Date(),
             reg: /ab+c/
         }
-    }]
+    }],
 }];
+obj[2].weird_arr = [];
+obj[2].weird_arr.test = 'yo';
+obj[2].weird_arr['\0x2c'] = 'hey';
 obj[3] = obj;
-obj[4] = obj[1];    var args;
+obj[4] = obj[1];
+var args;
 function test(one, two, three) {
     obj[5] = arguments;
     console.log(stringify(obj, false, true));
@@ -93,15 +96,20 @@ The result would be:
                     func: function () {
                         var test;
                     },
-                    func2: function () {
+                    func2: function ()
+                    {
                         var test2
                     },
                     err: Error: test error object,
-                    date: Sat Dec 19 2015 11:50:55 GMT+0800 (CST),
+                    date: Tue Jan 05 2016 14:53:44 GMT+0800 (CST),
                     reg: /ab+c/
                 }
             }
-        ]
+        ],
+        weird_arr: {
+            test: yo,
+            x2c: hey
+        }
     },
     3: [Circular],
     4: {
@@ -131,6 +139,8 @@ stringify(obj, ignoreFunc, printFuncContent)
 * ignoreFunc [boolean]: whether to ignore function attributes
 * printFuncContent [boolean]: whether to print funciton content, the ignoreFunc must be set to false.
 
+> NOTICE: function stringify takes more than three arguments, except for the first three ones, the other ones are for internal recursive call usage, so don't pass more than three arguments to the funciton when calling it.
+
 # Supported Data Types
 
 * Object
@@ -140,6 +150,7 @@ stringify(obj, ignoreFunc, printFuncContent)
 * Boolean
 * Number
 * String
+* Error
 
 # Unsupported Data Types
 
