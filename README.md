@@ -9,7 +9,7 @@
 # Installation
 
 ```bash
-npm install git+https://git@github.com/roackb2/stringify.git
+npm install stringify --save
 ```
 
 # Feature
